@@ -16,6 +16,7 @@
 
 #include "mkdtimg_core.h"
 
+#include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -222,6 +223,16 @@ static int32_t output_img_entry(FILE *img_fp, size_t entry_offset,
   entry.custom[1] = get_fdt32_from_number_or_prop(fdt, options->custom[1]);
   entry.custom[2] = get_fdt32_from_number_or_prop(fdt, options->custom[2]);
   entry.custom[3] = get_fdt32_from_number_or_prop(fdt, options->custom[3]);
+
+  char *dt_bname = basename(fdt_info->filename);
+  if (!dt_bname) {
+    fprintf(stderr, "Basename '%s' failed.\n", fdt_info->filename);
+    ret = -1;
+    goto end;
+  }
+  strncpy(entry.fdt_fname, dt_bname, sizeof(entry.fdt_fname));
+  entry.fdt_fname[sizeof(entry.fdt_fname) - 1] = 0;
+
   fseek(img_fp, entry_offset, SEEK_SET);
   fwrite(&entry, sizeof(entry), 1, img_fp);
 

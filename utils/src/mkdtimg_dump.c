@@ -118,6 +118,7 @@ static void output_table_header(FILE *out_fp, const struct dt_table_header *head
 
 static void output_table_entry(FILE *out_fp, int index, const struct dt_table_entry *entry) {
   fprintf(out_fp, "dt_table_entry[%d]:\n", index);
+  output_prop_str(out_fp, "fdt_fname", entry->fdt_fname);
   output_prop_int(out_fp, "dt_size", entry->dt_size);
   output_prop_int(out_fp, "dt_offset", entry->dt_offset);
   output_prop_hex(out_fp, "id", entry->id);
